@@ -1,0 +1,38 @@
+# Environment Management
+python-dotenv
+
+# Web Framework
+streamlit
+
+# PDF Handling
+PyMuPDF
+PyPDF2
+
+# NLP
+spacy
+
+# Graph Database
+neo4j
+
+# Data Manipulation
+pandas
+numpy
+
+# Progress Bar
+tqdm
+
+# Vector Search
+faiss-cpu
+
+# Plotting
+matplotlib
+
+# Graphs
+networkx
+
+# LangChain and OpenAI
+langchain-openai
+openai
+
+# Clipboard
+st-copy-to-clipboard
