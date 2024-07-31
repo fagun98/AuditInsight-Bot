@@ -58,11 +58,8 @@ The motive of AuditInsight Bot is to provide users with an efficient tool for an
 ## Contributing
 Contributions are welcome! Please open an issue or submit a pull request for any changes or improvements.
 
-## License
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
 ## Contact
-For any questions or inquiries, please contact us at support@auditinsightbot.com.
+For any questions or inquiries, please contact us at fagun.raithatha28@gmail.com.
 
 ---
 
