@@ -247,58 +247,67 @@ class Neo4jHandler:
 
 
 if __name__ == "__main__":
-    
-    # Reading the data from the Excel sheet.
-    df = pd.read_excel('data/Final_Result_Top50.xlsx')
 
-    Report = df['Report'].tolist()
-    # Company_Names = df['Company Name'].tolist()
-    # Opinion = df['Opinion'].tolist()
-    # Audits = df['Audits'].tolist()
-    
-    # Extracting auditor from the Report
-    auditor = [report.lower().split('/s/')[1].split('\n') for report in Report]
-    auditor = [a[0].strip() if len(a[0]) > 2 else a[1].strip() for a in auditor]
-    df['Auditor'] = auditor
+    if False:    
+        # Reading the data from the Excel sheet.
+        df = pd.read_excel('data/Final_Result_Top50.xlsx')
 
-    #Extracting Report Name from the Report
-    report_name = [report.split('\n')[0] if len(report.split('\n')[0]) > 2 else report.split('\n')[1] for report in df['Report']]
-    df['Report_Name'] = report_name
-    
-    #Converting the audit str -> dict
-    df['Audits'] = df['Audits'].apply(lambda x: ast.literal_eval(x))
-
-
-    #Creating an Instance of the class
-    neo4j_handler = Neo4jHandler()
-
-    #Clearing the database
-    neo4j_handler.clear_database()
-
-    #Populating the database with the data. 
-    for index, row in tqdm(df.iterrows(), total=len(df)):
-        company_name = row['Company Name']
-        auditor_name = row['Auditor']
-        report_name = row['Report_Name']
-        report_text = row['Report']
-        opinion = row['Opinion']
-        audits = row['Audits']
-
+        Report = df['Report'].tolist()
+        # Company_Names = df['Company Name'].tolist()
+        # Opinion = df['Opinion'].tolist()
+        # Audits = df['Audits'].tolist()
         
-        # Create Company-Auditor relationship
-        neo4j_handler.create_company_auditor_relationship(company_name, auditor_name)
+        # Extracting auditor from the Report
+        auditor = [report.lower().split('/s/')[1].split('\n') for report in Report]
+        auditor = [a[0].strip() if len(a[0]) > 2 else a[1].strip() for a in auditor]
+        df['Auditor'] = auditor
 
-        # Create Company-Report relationship
-        neo4j_handler.create_company_report_relationship(company_name, report_name, report_text)
+        #Extracting Report Name from the Report
+        report_name = [report.split('\n')[0] if len(report.split('\n')[0]) > 2 else report.split('\n')[1] for report in df['Report']]
+        df['Report_Name'] = report_name
         
-        # Create Report-Opinion relationship
-        neo4j_handler.create_report_opinion_relationship(report_name, report_text, opinion)
+        #Converting the audit str -> dict
+        df['Audits'] = df['Audits'].apply(lambda x: ast.literal_eval(x))
 
-        # Create Report-Audit relationships
-        for audit in audits:
-            audit_name = audit['Audit_Name']
-            audit_opinion = audit['Audit_Opinion']
-            neo4j_handler.create_opinion_audit_relationship(opinion, audit_name, audit_opinion)
 
-    # Close the Neo4j handler
-    neo4j_handler.close()
+        #Creating an Instance of the class
+        neo4j_handler = Neo4jHandler()
+
+        #Clearing the database
+        neo4j_handler.clear_database()
+
+        #Populating the database with the data. 
+        for index, row in tqdm(df.iterrows(), total=len(df)):
+            company_name = row['Company Name']
+            auditor_name = row['Auditor']
+            report_name = row['Report_Name']
+            report_text = row['Report']
+            opinion = row['Opinion']
+            audits = row['Audits']
+
+            
+            # Create Company-Auditor relationship
+            neo4j_handler.create_company_auditor_relationship(company_name, auditor_name)
+
+            # Create Company-Report relationship
+            neo4j_handler.create_company_report_relationship(company_name, report_name, report_text)
+            
+            # Create Report-Opinion relationship
+            neo4j_handler.create_report_opinion_relationship(report_name, report_text, opinion)
+
+            # Create Report-Audit relationships
+            for audit in audits:
+                audit_name = audit['Audit_Name']
+                audit_opinion = audit['Audit_Opinion']
+                neo4j_handler.create_opinion_audit_relationship(opinion, audit_name, audit_opinion)
+
+        # Close the Neo4j handler
+        neo4j_handler.close()
+    else:
+        #Creating an Instance of the class
+        neo4j_handler = Neo4jHandler()
+
+        neo4j_handler.retrive_all_likable_names(company_name="Delloite")
+        print("\n Connected accurately.")
+        # Close the Neo4j handler
+        neo4j_handler.close()

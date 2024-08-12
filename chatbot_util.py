@@ -1,15 +1,17 @@
 from utils.graph import Neo4jHandler
 from utils.utils import OpenAIChatResponse
+from pandas import DataFrame
 
-def get_response(query:str, history):
+def get_response(query:str, history: list, records:DataFrame = None):
     db = Neo4jHandler()
     aiReponse = OpenAIChatResponse()
 
-    records = db.handle_query(query, distance=0.5)
+    if records is None:
+        records = db.handle_query(query, distance=0.5)
 
     if len(records) > 0:
         try:
-            response = aiReponse.generate_response(query=query, history=history, record=records)
+            response = aiReponse.generate_response(query=query, history=history, records=records)
         except:
             response = "Error Occured while generating response."
     

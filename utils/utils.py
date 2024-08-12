@@ -6,6 +6,7 @@ from langchain_core.runnables import Runnable, RunnableMap, RunnableLambda, Runn
 from langchain.memory import ConversationBufferMemory
 from operator import itemgetter
 from dotenv import load_dotenv
+from pandas import DataFrame
 load_dotenv()
 
 def generate_chatbot_tempalte(query, records):
@@ -64,7 +65,7 @@ class OpenAIChatResponse:
         self.openai_api_key = os.environ.get("OPENAI_API_KEY")
         self.client = OpenAI()
     
-    def generate_response(self, history, query:str, record, model:str = "gpt-3.5-turbo", max_token:int = 4000):
+    def generate_response(self, history, query:str, records:DataFrame, model:str = "gpt-3.5-turbo", max_token:int = 4000):
         
         memory = self.make_memory_from_testing_chat_history(history)
 
@@ -81,34 +82,17 @@ class OpenAIChatResponse:
 
         intent_clf_chain = loaded_memory | handle_prompt| model
 
-        prompt = generate_chatbot_tempalte(query, record)
-    
-        result = intent_clf_chain.invoke({"prompt" : prompt})
-        
-        print("\n\n\n\n===================={full_response}====================\n\n\n")
-        print(result)
+        prompt = generate_chatbot_tempalte(query, records)
 
-        print("\n\n\n\n===================={response_content}====================\n\n\n")
-        print(result.content)
+        # print("\n============={prompt}=================\n")
+        # print(prompt)
 
-        print("\n\n\n\n===================={response_metadata}====================\n\n\n")
-        print(result.response_metadata)
+        try: 
+            result = intent_clf_chain.invoke({"prompt" : prompt})
+            return result.content
+        except:
+            return "No Response"
 
-        # try:
-        #     chat_completion = self.client.chat.completions.create(
-        #         messages=[
-        #             {
-        #                 "role": "user",
-        #                 "content": generate_chatbot_tempalte(history, query, record),
-        #             }
-        #         ],
-        #         model=model,
-        #         max_tokens=max_token,
-        #     )
-        #     return chat_completion.choices[0].message.content
-        # except:
-        #     print('Error generating response')
-        #     return None
     
     def make_memory_from_testing_chat_history(self,chat_history):
         """
