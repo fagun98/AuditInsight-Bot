@@ -16,7 +16,7 @@ def get_response(query:str, history: list, records:DataFrame = None):
             response = "Error Occured while generating response."
     
     else:
-        response = "Evidence not available."
+        response = aiReponse.generate_response(query=query, history=history, records=records, general_question=True)
 
     return response, records
 
