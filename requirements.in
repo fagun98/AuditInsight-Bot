@@ -32,6 +32,7 @@ networkx
 
 # LangChain and OpenAI
 langchain-openai
+langchain_community
 openai
 
 # Clipboard
