@@ -3,11 +3,14 @@ from semantic_router.encoders import OpenAIEncoder
 from semantic_router.layer import RouteLayer
 import os
 from dotenv import load_dotenv
+import streamlit as st
+
 load_dotenv()
 
 class queryClassifier:
     def __init__(self, encoder = None):
-        self.encoder = encoder if encoder else OpenAIEncoder(openai_api_key=os.environ["OPENAI_API_KEY"])
+        # self.encoder = encoder if encoder else OpenAIEncoder(openai_api_key=os.environ["OPENAI_API_KEY"])
+        self.encoder = encoder if encoder else OpenAIEncoder(openai_api_key=st.secrets["OPENAI_API_KEY"])
         self.routes = []
 
     def add_route(self, route:Route):

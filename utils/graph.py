@@ -9,17 +9,21 @@ import networkx as nx
 import pandas as pd
 import ast 
 import tqdm
+import streamlit as st
 
 class Neo4jHandler:
     def __init__(self, uri:str = None, username:str = None, password:str = None):
         if not uri:
-            self.uri = os.environ["NEO4J_URI"]
+            # self.uri = os.environ["NEO4J_URI"]
+            self.uri = st.secrets["NEO4J_URI"]
         
         if not username:
-            self.username = os.environ["NEO4J_USERNAME"]
+            # self.username = os.environ["NEO4J_USERNAME"]
+            self.username = st.secrets["NEO4J_USERNAME"]
 
         if not password:
-            self.password = os.environ["NEO4J_PASSWORD"]
+            # self.password = os.environ["NEO4J_PASSWORD"]
+            self.password = st.secrets["NEO4J_PASSWORD"]
             
         self.driver = GraphDatabase.driver(self.uri, auth=(self.username, self.password))
         self.embedder = OpenAIEmbedder()

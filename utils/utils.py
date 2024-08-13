@@ -6,6 +6,7 @@ from langchain_core.runnables import Runnable, RunnableMap, RunnableLambda, Runn
 from langchain.memory import ConversationBufferMemory
 from operator import itemgetter
 from dotenv import load_dotenv
+import streamlit as st
 from pandas import DataFrame
 load_dotenv()
 
@@ -97,7 +98,8 @@ def generate_chatbot_tempalte(query, records, general_question:bool = False):
 
 class OpenAIChatResponse:
     def __init__(self, **kwargs):
-        self.openai_api_key = os.environ.get("OPENAI_API_KEY")
+        # self.openai_api_key = os.environ.get("OPENAI_API_KEY")
+        self.openai_api_key = st.secrets["OPENAI_API_KEY"]
         self.client = OpenAI()
     
     def generate_response(self, history, query:str, records:DataFrame, general_question:bool = False, model:str = "gpt-3.5-turbo", max_token:int = 4000):
@@ -181,7 +183,8 @@ class OpenAIChatResponse:
 class OpenAIEmbedder:
     def __init__(self, model:str='text-embedding-ada-002', **kwargs):
         self.model = model  # can also be text-embedding-3-large        
-        self.openai_api_key = os.environ.get("OPENAI_API_KEY")
+        # self.openai_api_key = os.environ.get("OPENAI_API_KEY")
+        self.openai_api_key = st.secrets["OPENAI_API_KEY"]
 
         self.embedder = OpenAIEmbeddings(
             model=self.model,  #'text-embedding-ada-002'
