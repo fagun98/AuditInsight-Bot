@@ -26,6 +26,7 @@ faiss-cpu
 
 # Plotting
 matplotlib
+py2neo
 
 # Graphs
 networkx
